@@ -1,0 +1,3 @@
+app:
+  defaultName: ${USER_NAME:World}
+        
