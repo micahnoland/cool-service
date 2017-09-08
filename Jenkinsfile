@@ -29,7 +29,7 @@ pipeline {
       	unstash 'work'
         script {
     	  try {
-    	  	sh('mvnw clean test')
+    	  	sh('./mvnw clean test')
           } catch (e) {
             currentBuild.result = 'FAILURE'
             throw e 
@@ -45,7 +45,7 @@ pipeline {
       steps {
         deleteDir()
       	unstash 'work'
-        sh 'mvnw clean install'
+        sh './mvnw clean install'
 		stash name: 'work', useDefaultExcludes: false
       }
     }
