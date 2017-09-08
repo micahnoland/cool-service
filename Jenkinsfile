@@ -50,6 +50,7 @@ pipeline {
       }
     }
     stage ('Docker') {
+      agent any
       steps {
       	deleteDir()
       	unstash 'work'
