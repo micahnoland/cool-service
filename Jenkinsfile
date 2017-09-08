@@ -55,7 +55,7 @@ pipeline {
       	deleteDir()
       	unstash 'work'
       	script {
-        	docker.withRegistry('https://hub.docker.com', 'docker-hub') {
+        	docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
         		docker.build("${env.DOCKER_IMAGE}:${env.BUILD_ID}").push()
     		}
         }
