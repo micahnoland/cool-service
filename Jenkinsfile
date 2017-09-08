@@ -1,5 +1,4 @@
 #!/usr/bin/env groovy
-@Library('techops-pipeline') _
 
 pipeline {
   agent none
