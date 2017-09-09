@@ -9,9 +9,6 @@ pipeline {
  options {
   timeout(time: 1, unit: 'HOURS')
  }
- parameters {
-  booleanParam(name: 'RELEASE_BUILD', defaultValue: false, description: 'Is this a -RELEASE build?')
- }
  stages {
   stage('Setup') {
    agent any
