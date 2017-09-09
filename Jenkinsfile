@@ -68,40 +68,40 @@ pipeline {
    }
   }
   stage('Deploy to Prod?') {
-     agent none
-     when {
-      expression {
-        boolean deploy = false
-        try {
-         // Should have a timeout here if one is not defined in the pipeline { options } section
-         input message: 'Deploy to Production?'
-         deploy = true
-        } catch (final ignore) {
-         deploy = false
-        }
-        return deploy
-      }
+   agent none
+   when {
+    expression {
+     boolean deploy = false
+     try {
+      // Should have a timeout here if one is not defined in the pipeline { options } section
+      input message: 'Deploy to Production?'
+      deploy = true
+     } catch (final ignore) {
+      deploy = false
      }
-     steps {
-      script {
-       env.DEPLOY_TO_PROD = 'true'
-      }
+     return deploy
+    }
+   }
+   steps {
+    script {
+     env.DEPLOY_TO_PROD = 'true'
+    }
+   }
+  }
+  stage('Prod Deployment') {
+   agent any
+   when {
+    expression {
+     if (env.DEPLOY_TO_PROD == 'true') {
+      return true
      }
     }
-    stage('Prod Deployment') {
-     agent any
-     when {
-      expression {
-       if (env.DEPLOY_TO_PROD == 'true') {
-        return true
-       }
-      }
-     }
-     steps {
-      script {
-       //deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'prod', "${env.DOCKER_IMAGE}:${env.BUILD_ID}"))
-      }
-     }
+   }
+   steps {
+    script {
+     //deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'prod', "${env.DOCKER_IMAGE}:${env.BUILD_ID}"))
     }
+   }
+  }
  }
 }
