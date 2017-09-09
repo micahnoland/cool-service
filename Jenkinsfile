@@ -59,7 +59,7 @@ pipeline {
     stash name: 'work', useDefaultExcludes: false
    }
   }
-  stage('Dev Deployments') {
+  stage('Dev Deployment') {
    agent any
    steps {
     script {
