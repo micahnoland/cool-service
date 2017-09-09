@@ -1,74 +1,110 @@
 #!/usr/bin/env groovy
 
 pipeline {
-  agent none
-  environment {  
-  	DEPLOYMENT_ID_APP_NAME = 'CoolService'
-  	DOCKER_IMAGE = 'micahnoland/cool-service'
-  }
-  options {
-	timeout(time: 1, unit: 'HOURS') 
-  }
-  parameters {
-    booleanParam(name: 'RELEASE_BUILD', defaultValue: false, description: 'Is this a -RELEASE build?')
-  }
-  stages {
-    stage ('Setup') {
-      agent any
-      steps {
-      	script {
-     		checkout scm
-	    }	 
-	    stash name: 'work', useDefaultExcludes: false
-      }
-    }  
-    stage ('Maven Test') { 
-      agent any  
-      steps {
-        deleteDir()
-      	unstash 'work'
-        script {
-    	  try {
-    	  	sh('./mvnw clean test')
-          } catch (e) {
-            currentBuild.result = 'FAILURE'
-            throw e 
-          } finally {
-            junit "**/target/surefire-reports/*.xml"
-          }		  
-		}
-		stash name: 'work', useDefaultExcludes: false
-      } 
+ agent none
+ environment {
+  DEPLOYMENT_ID_APP_NAME = 'CoolService'
+  DOCKER_IMAGE = 'micahnoland/cool-service'
+ }
+ options {
+  timeout(time: 1, unit: 'HOURS')
+ }
+ parameters {
+  booleanParam(name: 'RELEASE_BUILD', defaultValue: false, description: 'Is this a -RELEASE build?')
+ }
+ stages {
+  stage('Setup') {
+   agent any
+   steps {
+    script {
+     checkout scm
     }
-    stage ('Maven Install') {
-      agent any
-      steps {
-        deleteDir()
-      	unstash 'work'
-        sh './mvnw clean install'
-		stash name: 'work', useDefaultExcludes: false
-      }
+    stash name: 'work', useDefaultExcludes: false
+   }
+  }
+  stage('Maven Test') {
+   agent any
+   steps {
+    deleteDir()
+    unstash 'work'
+    script {
+     try {
+      sh('./mvnw clean test')
+     } catch (e) {
+      currentBuild.result = 'FAILURE'
+      throw e
+     } finally {
+      junit "**/target/surefire-reports/*.xml"
+     }
     }
-    stage ('Docker') {
-      agent any
-      steps {
-      	deleteDir()
-      	unstash 'work'
-      	script {
-        	docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
-        		docker.build("${env.DOCKER_IMAGE}:${env.BUILD_ID}").push()
-    		}
+    stash name: 'work', useDefaultExcludes: false
+   }
+  }
+  stage('Maven Install') {
+   agent any
+   steps {
+    deleteDir()
+    unstash 'work'
+    sh './mvnw clean install'
+    stash name: 'work', useDefaultExcludes: false
+   }
+  }
+  stage('Docker') {
+   agent any
+   steps {
+    deleteDir()
+    unstash 'work'
+    script {
+     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+      docker.build("${env.DOCKER_IMAGE}:${env.BUILD_ID}").push()
+     }
+    }
+    stash name: 'work', useDefaultExcludes: false
+   }
+  }
+  stage('Dev Deployments') {
+   agent any
+   steps {
+    script {
+     //deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'dev', "${DOCKER_IMAGE}")
+    }
+   }
+  }
+  stage('Deploy to Prod?') {
+     agent none
+     when {
+      expression {
+        boolean deploy = false
+        try {
+         // Should be a timeout here if we don't have one is not defined in the pipeline { options } section
+         input message: 'Deploy to Production?'
+         deploy = true
+        } catch (final ignore) {
+         deploy = false
         }
-        stash name: 'work', useDefaultExcludes: false
+        return deploy
       }
+     }
+     steps {
+      script {
+       env.DEPLOY_TO_PROD = 'true'
+      }
+     }
     }
-    stage ('Dev Deployments') {
-      agent any
-      steps {
-      	script {
-      	  //deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'dev', "${DOCKER_IMAGE}")
-      	}
-      }   
+    stage('Prod Deployment') {
+     agent any
+     when {
+      expression {
+       if (env.DEPLOY_TO_PROD == 'true') {
+        return true
+       }
+      }
+     }
+     steps {
+      script {
+       //deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'prod', "${DOCKER_IMAGE}"))
+      }
+     }
     }
-  }    
+ }
 }
