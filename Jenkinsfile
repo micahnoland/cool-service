@@ -63,7 +63,7 @@ pipeline {
    agent any
    steps {
     script {
-     //deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'dev', "${DOCKER_IMAGE}:${env.BUILD_ID}")
+     //deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'dev', "${env.DOCKER_IMAGE}:${env.BUILD_ID}")
     }
    }
   }
@@ -73,7 +73,7 @@ pipeline {
       expression {
         boolean deploy = false
         try {
-         // Should be a timeout here if we don't have one is not defined in the pipeline { options } section
+         // Should have a timeout here if one is not defined in the pipeline { options } section
          input message: 'Deploy to Production?'
          deploy = true
         } catch (final ignore) {
@@ -99,7 +99,7 @@ pipeline {
      }
      steps {
       script {
-       //deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'prod', "${DOCKER_IMAGE}:${env.BUILD_ID}"))
+       //deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'prod', "${env.DOCKER_IMAGE}:${env.BUILD_ID}"))
       }
      }
     }
