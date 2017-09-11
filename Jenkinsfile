@@ -52,7 +52,7 @@ pipeline {
     deleteDir()
     unstash 'work'
     script {
-     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+     docker.withRegistry('http://registry.marathon.l4lb.thisdcos.directory:5000') {
       docker.build("${env.DOCKER_IMAGE}:${env.BUILD_ID}").push()
      }
     }
@@ -63,7 +63,7 @@ pipeline {
    agent any
    steps {
     script {
-     //deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'dev', "${env.DOCKER_IMAGE}:${env.BUILD_ID}")
+     //deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'dev', "registry.marathon.l4lb.thisdcos.directory/${env.DOCKER_IMAGE}:${env.BUILD_ID}")
     }
    }
   }
@@ -99,7 +99,7 @@ pipeline {
    }
    steps {
     script {
-     //deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'prod', "${env.DOCKER_IMAGE}:${env.BUILD_ID}"))
+     //deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'prod', "registry.marathon.l4lb.thisdcos.directory/${env.DOCKER_IMAGE}:${env.BUILD_ID}"))
     }
    }
   }
