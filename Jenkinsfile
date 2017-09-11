@@ -4,7 +4,7 @@ pipeline {
  agent none
  environment {
   DEPLOYMENT_ID_APP_NAME = 'CoolService'
-  DOCKER_IMAGE = 'micahnoland/cool-service'
+  DOCKER_IMAGE = 'cool-service'
  }
  options {
   timeout(time: 1, unit: 'HOURS')
