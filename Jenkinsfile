@@ -52,7 +52,7 @@ pipeline {
     deleteDir()
     unstash 'work'
     script {
-     docker.withRegistry('registry.marathon.l4lb.thisdcos.directory') {
+     docker.withRegistry('http://registry.marathon.l4lb.thisdcos.directory') {
       docker.build("${env.DOCKER_IMAGE}:${env.BUILD_ID}").push()
      }
     }
