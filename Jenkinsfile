@@ -1,4 +1,5 @@
 #!/usr/bin/env groovy
+@Library('deployment-api') _
 
 pipeline {
  agent none
@@ -63,7 +64,7 @@ pipeline {
    agent any
    steps {
     script {
-     //deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'dev', "registry.marathon.l4lb.thisdcos.directory/${env.DOCKER_IMAGE}:${env.BUILD_ID}")
+     deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'dev', "registry.marathon.l4lb.thisdcos.directory/${env.DOCKER_IMAGE}:${env.BUILD_ID}")
     }
    }
   }
@@ -99,7 +100,7 @@ pipeline {
    }
    steps {
     script {
-     //deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'prod', "registry.marathon.l4lb.thisdcos.directory/${env.DOCKER_IMAGE}:${env.BUILD_ID}"))
+     deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'prod', "registry.marathon.l4lb.thisdcos.directory/${env.DOCKER_IMAGE}:${env.BUILD_ID}"))
     }
    }
   }
