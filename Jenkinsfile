@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-@Library('github.com/micahnoland/deployment-api-jenkins@master') _
+@Library('deployment-api') _
 
 pipeline {
  agent none
