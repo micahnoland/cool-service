@@ -4,7 +4,8 @@
 pipeline {
  agent none
  environment {
-  DEPLOYMENT_ID_APP_NAME = 'CoolService'
+  DEPLOYMENT_API_APP_NAME = 'CoolService'
+  DEPLOYMENT_API_SERVICE_URL = 'http://dcos-here-elasticl-1qqzgknfp7tt8-1288063607.us-east-1.elb.amazonaws.com/service/deployment-api-test'
   DOCKER_IMAGE = 'micahnoland/cool-service'
  }
  options {
@@ -64,7 +65,7 @@ pipeline {
    agent any
    steps {
     script {
-     deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'dev', "registry.marathon.l4lb.thisdcos.directory/${env.DOCKER_IMAGE}:${env.BUILD_ID}", 'deployment-api-service.marathon.l4lb.thisdcos.directory:8080')
+     deploymentApi(env.DEPLOYMENT_API_APP_NAME, 'dev', "registry.marathon.l4lb.thisdcos.directory/${env.DOCKER_IMAGE}:${env.BUILD_ID}", env.DEPLOYMENT_API_SERVICE_URL)
     }
    }
   }
@@ -100,7 +101,7 @@ pipeline {
    }
    steps {
     script {
-     deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'prod', "registry.marathon.l4lb.thisdcos.directory/${env.DOCKER_IMAGE}:${env.BUILD_ID}", 'deployment-api-service.marathon.l4lb.thisdcos.directory:8080')
+     deploymentApi(env.DEPLOYMENT_API_APP_NAME, 'prod', "registry.marathon.l4lb.thisdcos.directory/${env.DOCKER_IMAGE}:${env.BUILD_ID}", env.DEPLOYMENT_API_SERVICE_URL)
     }
    }
   }
