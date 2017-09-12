@@ -5,7 +5,7 @@ pipeline {
  agent none
  environment {
   DEPLOYMENT_API_APP_NAME = 'CoolService'
-  DEPLOYMENT_API_SERVICE_URL = 'http://dcos-here-elasticl-1qqzgknfp7tt8-1288063607.us-east-1.elb.amazonaws.com/service/deployment-api-service'
+  DEPLOYMENT_API_SERVICE_URL = 'https://dcos-here-elasticl-1qqzgknfp7tt8-1288063607.us-east-1.elb.amazonaws.com/service/deployment-api-service'
   DOCKER_IMAGE = 'micahnoland/cool-service'
  }
  options {
