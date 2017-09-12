@@ -64,7 +64,7 @@ pipeline {
    agent any
    steps {
     script {
-     deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'dev', "registry.marathon.l4lb.thisdcos.directory/${env.DOCKER_IMAGE}:${env.BUILD_ID}")
+     deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'dev', "registry.marathon.l4lb.thisdcos.directory/${env.DOCKER_IMAGE}:${env.BUILD_ID}", 'deployment-api-service.marathon.l4lb.thisdcos.directory:8080')
     }
    }
   }
@@ -100,7 +100,7 @@ pipeline {
    }
    steps {
     script {
-     deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'prod', "registry.marathon.l4lb.thisdcos.directory/${env.DOCKER_IMAGE}:${env.BUILD_ID}")
+     deploymentApi(env.DEPLOYMENT_ID_APP_NAME, 'prod', "registry.marathon.l4lb.thisdcos.directory/${env.DOCKER_IMAGE}:${env.BUILD_ID}", 'deployment-api-service.marathon.l4lb.thisdcos.directory:8080')
     }
    }
   }
