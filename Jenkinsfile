@@ -44,7 +44,7 @@ pipeline {
    steps {
     deleteDir()
     unstash 'work'
-    sh './mvnw clean install'
+    sh './mvnw clean install -DskipTests'
     stash name: 'work', useDefaultExcludes: false
    }
   }
