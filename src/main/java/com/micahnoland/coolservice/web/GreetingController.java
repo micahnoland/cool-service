@@ -15,10 +15,14 @@ public class GreetingController {
 	@Value("${ACTIVE_PROFILES}")
 	private String appEnv;
 	
+	@Value("${MY_SECRET}")
+	private String secret;
+	
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public String index(@RequestParam(value="name", required=false) String name, Model model) {
 		model.addAttribute("name", name == null ? defaultName : name);
 		model.addAttribute("appEnv", appEnv);
+		model.addAttribute("secret", secret);
 		return "index";
 	}
 }

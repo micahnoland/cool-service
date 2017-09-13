@@ -6,5 +6,7 @@
 </head>
 <body>
 	<p th:text="'Hello, ' + ${name} + '! (We are in ' + ${appEnv} + ')'" />
+	
+	<p th:text="'Do I know a secret? (' + ${secret:Nope} + ')'" />
 </body>
 </html> 
