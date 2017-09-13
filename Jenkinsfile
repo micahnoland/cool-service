@@ -5,7 +5,7 @@ pipeline {
  agent none
  environment {
   DEPLOYMENT_API_APP_NAME = 'CoolService'
-  DEPLOYMENT_API_SERVICE_URL = 'http://deployment-api-service.marathon.l4lb.thisdcos.directory:8080'
+  DEPLOYMENT_API_URL = 'http://deployment-api-service.marathon.l4lb.thisdcos.directory:8080'
   DOCKER_REGISTRY = 'registry.marathon.l4lb.thisdcos.directory:5000'
   DOCKER_IMAGE = 'micahnoland/cool-service'
  }
@@ -66,7 +66,7 @@ pipeline {
    agent any
    steps {
     script {
-     deploymentApi(env.DEPLOYMENT_API_APP_NAME, 'dev', "${env.DOCKER_REGISTRY}/${env.DOCKER_IMAGE}:${env.BUILD_ID}", env.DEPLOYMENT_API_SERVICE_URL)
+     deploymentApi(env.DEPLOYMENT_API_APP_NAME, 'dev', "${env.DOCKER_REGISTRY}/${env.DOCKER_IMAGE}:${env.BUILD_ID}")
     }
    }
   }
@@ -102,7 +102,7 @@ pipeline {
    }
    steps {
     script {
-     deploymentApi(env.DEPLOYMENT_API_APP_NAME, 'prod', "${env.DOCKER_REGISTRY}/${env.DOCKER_IMAGE}:${env.BUILD_ID}", env.DEPLOYMENT_API_SERVICE_URL)
+     deploymentApi(env.DEPLOYMENT_API_APP_NAME, 'prod', "${env.DOCKER_REGISTRY}/${env.DOCKER_IMAGE}:${env.BUILD_ID}")
     }
    }
   }
