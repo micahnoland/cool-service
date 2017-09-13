@@ -15,7 +15,7 @@ public class GreetingController {
 	@Value("${ACTIVE_PROFILES}")
 	private String appEnv;
 	
-	@Value("${MY_SECRET}")
+	@Value("${MY_SECRET:Nope}")
 	private String secret;
 	
 	@RequestMapping(value="/", method=RequestMethod.GET)
